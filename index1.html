@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>“好老师”题库管理系统</title>
+	<link rel="stylesheet" href="/layui/css/layui.css">
+	<script src="/layui/layui.js"></script>
+</head>
+
+<body>
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">“好老师”题库管理系统</div>
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;" id="userLoginInformation"></a></li>
+				<li class="layui-nav-item"><a href="#" id="exitSystem">退出登录</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree" lay-filter="test">
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/Organization/OrganizationManagement.html"
+							target="main">组织结构管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/Course/CourseManagement.html" target="main">课程管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/CoursePoints/CoursePointsManagement.html"
+							target="main">课程知识点管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">题库管理</a>
+						<dl class="layui-nav-child">
+							<dd><a href="javascript:;" data-url="/QuestionBank/TypeManagement.html"
+									target="main">题型管理</a></dd>
+							<dd><a href="javascript:;" data-url="/QuestionBank/TikuFirst.html" target="main">课程题库管理</a>
+							</dd>
+
+						</dl>
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/Question/QuestionManage.html" target="main">试题管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/Kaoshijihua/Testplan.html">考试计划管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" data-url="/Zujuan/CourseshijuanList.html">组卷管理</a>
+
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">试卷管理</a>
+						<dl class="layui-nav-child">
+							<dd><a href="javascript:;" data-url="/Shijuan/SjList.html" target="main">管理试卷</a></dd>
+						</dl>
+						<dl class="layui-nav-child">
+							<dd><a href="javascript:;" data-url="/Shijuan/ShList.html" target="main">试卷审核</a></dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">系统管理</a>
+						<dl class="layui-nav-child">
+							<dd><a href="javascript:;" data-url="/System/GnList.html" target="main">功能管理</a></dd>
+							<dd><a href="javascript:;" data-url="/System/JsList.html" target="main">角色管理</a></dd>
+							<dd><a href="javascript:;" data-url="/System/UserList.html" target="main">用户管理</a></dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<iframe src="" frameborder="0" name="main" id="main" style="width:100%;height:100%;"></iframe>
+		</div>
+
+		<div class="layui-footer">
+			© “好老师”题库管理系统
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script>
+	layui.use(['element', 'jquery'], function () {
+		var element = layui.element;
+		var $ = layui.jquery;
+		// 获取当前页面的 URLSearchParams 对象
+		//const params = new URLSearchParams(window.location.search);
+		// 使用 get() 方法获取指定的参数值
+		//const id = params.get("id");
+		const id = localStorage.getItem("id");
+		const UserNames = localStorage.getItem("name");
+
+		//const UserNames = params.get("id");
+		console.log(UserNames);
+		console.log(id);
+		$("#userLoginInformation").text("当前登录用户：" + UserNames);
+
+
+		$.ajax({
+			url: 'https://localhost:44322/api/SysUser/isLogin/' + id,
+			method: 'Get',
+			success: function (res) {
+				if (res == "无效") {
+					alert("当前登录无效，请重新登陆！");
+					location.href = "/Login/PlayerLogin.html";
+				}
+				// layer.msg(res);
+				//登录成功后跳转页面
+				//location.href='/index.html?id='+res.id+"&Name="+res.userName;
+			},
+			error: function (xhr) {
+				alert(xhr.responseText);
+			}
+		});
+
+
+		$("#exitSystem").click(function () {
+			// 执行退出系统的逻辑
+			// 跳转到指定页面
+			location.href = "/Login/PlayerLogin.html";
+		});
+		// 监听导航点击
+		$('.layui-nav-item a').on('click', function () {
+			var url = $(this).attr('data-url');
+			$('#main').attr('src', url);
+		});
+	});
+</script>
+
+<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script>
+
+</script>
